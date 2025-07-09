@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Перенаправление...</title>
-    <link rel="canonical" href="https://dks5.github.io/HTML-Publisher/HTML-Publisher.html">
+    <link rel="canonical" href="https://dks5.github.io/repo-name/repo-name.html">
     <style>
         body {
             font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -80,7 +80,7 @@
     <div class="redirect-container">
         <h1>Перенаправление на страницу публикации</h1>
         <p>Вы будете перенаправлены на страницу: <br>
-           <a id="redirect-link" href="https://dks5.github.io/HTML-Publisher/HTML-Publisher.html">
+           <a id="redirect-link" href="https://dks5.github.io/repo-name/repo-name.html">
                <span data-placeholder="page-title"></span>
            </a>
         </p>
@@ -102,13 +102,10 @@
             const countdownMessage = document.getElementById('countdown-message');
             const countdownTimer = document.getElementById('countdown-timer');
 
-            // Получаем значения плейсхолдеров для формирования URL
-            const githubUsername = document.getElementById('github-username').value || document.getElementById('github-username').placeholder;
-            const repoName = document.getElementById('repo-name').value || document.getElementById('repo-name').placeholder;
-
-            // Формируем целевой URL для перенаправления
-            const targetUrl = `https://${githubUsername}.github.io/${repoName}/${repoName}.html`;
-            redirectLinkElement.href = targetUrl; // Обновляем href ссылки в HTML
+            // The target URL is already correctly set in the HTML's href attribute
+            // by the main page's placeholder replacement logic.
+            // So, we just read it directly from the element.
+            const targetUrl = redirectLinkElement.href;
 
             let timeLeft = 10;
             let countdownInterval;
