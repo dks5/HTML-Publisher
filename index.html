@@ -102,10 +102,11 @@
             const countdownMessage = document.getElementById('countdown-message');
             const countdownTimer = document.getElementById('countdown-timer');
 
-            // The target URL is already correctly set in the HTML's href attribute
-            // by the main page's placeholder replacement logic.
-            // So, we just read it directly from the element.
+            // Целевой URL уже корректно установлен в атрибуте href ссылки
+            // благодаря логике замены плейсхолдеров на основной странице.
+            // Поэтому мы просто считываем его напрямую из элемента.
             const targetUrl = redirectLinkElement.href;
+            console.log('Target URL:', targetUrl); // Добавлено для отладки
 
             let timeLeft = 10;
             let countdownInterval;
