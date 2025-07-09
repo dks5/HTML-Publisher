@@ -74,23 +74,37 @@
             border-radius: 5px;
             text-align: left;
         }
+        .target-url-display {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #444;
+            word-break: break-all; /* Для длинных URL */
+            background-color: #f0f8ff;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px dashed #a0c0e0;
+        }
     </style>
 </head>
 <body>
     <div class="redirect-container">
         <h1>Перенаправление на страницу публикации</h1>
-        <p>Вы будете перенаправлены на страницу: <br>
+        <p>Вы будете перенаправлены на страницу:</p>
+        <div class="target-url-display">
+            <strong>URL:</strong> <span id="display-target-url"></span>
+        </div>
+        <p>
            <a id="redirect-link" href="https://dks5.github.io/HTML-Publisher/HTML-Publisher.html">
                <span data-placeholder="page-title"></span>
            </a>
         </p>
         <button id="confirm-redirect-btn" class="redirect-button">Перейти сейчас</button>
-        <p class="countdown" id="countdown-message">Автоматический переход через <span id="countdown-timer">10</span> секунд...</p>
+        <p class="countdown" id="countdown-message">Автоматический переход: <span id="countdown-timer">Функция в разработке</span></p>
         
         <div class="safety-note">
             <p><strong>Важное примечание для посетителей:</strong></p>
             <p>Эта страница служит для автоматического перенаправления на основную страницу публикации, размещенную на GitHub Pages. Переход по ссылке является полностью безопасным, так как вы остаетесь в рамках домена <code>github.io</code>, контролируемого владельцем репозитория.</p>
-            <p>Вы можете дождаться автоматического перехода или нажать кнопку "Перейти сейчас". Ваше решение о переходе является осознанным выбором.</p>
+            <p>Вы можете дождаться автоматического перехода (эта функция пока в разработке) или нажать кнопку "Перейти сейчас". Ваше решение о переходе является осознанным выбором.</p>
             <p><strong>Потенциальные последствия:</strong> Отсутствуют. Данный код не собирает личные данные, не устанавливает вредоносное ПО и не изменяет настройки вашего устройства. Он лишь направляет ваш браузер на другую страницу в том же безопасном домене.</p>
         </div>
     </div>
@@ -101,6 +115,8 @@
             const confirmButton = document.getElementById('confirm-redirect-btn');
             const countdownMessage = document.getElementById('countdown-message');
             const countdownTimer = document.getElementById('countdown-timer');
+            const displayTargetUrlElement = document.getElementById('display-target-url');
+
 
             // Целевой URL уже корректно установлен в атрибуте href ссылки
             // благодаря логике замены плейсхолдеров на основной странице.
@@ -108,26 +124,20 @@
             const targetUrl = redirectLinkElement.href;
             console.log('Target URL:', targetUrl); // Добавлено для отладки
 
-            let timeLeft = 10;
-            let countdownInterval;
+            // Отображаем URL на странице
+            displayTargetUrlElement.textContent = targetUrl;
 
-            const startCountdown = () => {
-                countdownInterval = setInterval(() => {
-                    timeLeft--;
-                    countdownTimer.textContent = timeLeft;
-                    if (timeLeft <= 0) {
-                        clearInterval(countdownInterval);
-                        window.location.href = targetUrl;
-                    }
-                }, 1000);
-            };
+            // Отключаем таймер и показываем сообщение о разработке
+            countdownTimer.textContent = 'Функция в разработке';
+            // clearInterval(countdownInterval); // Эта строка теперь не нужна, т.к. setInterval не запускается
 
+            // Логика кнопки "Перейти сейчас" остается прежней
             confirmButton.addEventListener('click', () => {
-                clearInterval(countdownInterval);
+                // clearInterval(countdownInterval); // Также не нужна, т.к. интервал не активен
                 window.location.href = targetUrl;
             });
 
-            startCountdown();
+            // startCountdown(); // Закомментировано, чтобы таймер не запускался автоматически
         });
     </script>
 </body>
