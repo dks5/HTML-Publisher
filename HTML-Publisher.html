@@ -462,6 +462,8 @@
             </button>, чтобы скопировать ссылку. Или нажми на заголовок выше, чтобы перейти на страницу публикации.
             Эта ссылка формируется из вашего никнейма GitHub (<span data-placeholder="github-username"></span>) и имени репозитория (<span data-placeholder="repo-name"></span>) в формате:
             <code class="block mt-2" id="generated-link-code">https://<span data-placeholder="github-username"></span>.github.io/<span data-placeholder="repo-name"></span>/</code>
+            <br>
+            <strong style="color: var(--error-red-border);">Важно:</strong> Переход по этой ссылке, а также её копирование, возможны только после того, как вы полностью создадите репозиторий на GitHub и выполните все шаги данной инструкции до конца. До этого момента ссылка может быть неактивна или вести на пустую страницу.
         </p>
         
         <details open>
@@ -724,7 +726,7 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            max-width: 500px;
+            max-width: 600px; /* Увеличена максимальная ширина */
             width: 100%;
         }
         h1 {
@@ -764,18 +766,49 @@
         a:hover {
             text-decoration: underline;
         }
+        .safety-note {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #d4edda;
+            background-color: #e9f7ef;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .target-url-display {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #444;
+            word-break: break-all; /* Для длинных URL */
+            background-color: #f0f8ff;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px dashed #a0c0e0;
+        }
     &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
     &lt;div class="redirect-container"&gt;
         &lt;h1&gt;Перенаправление на страницу публикации&lt;/h1&gt;
-        &lt;p&gt;Вы будете перенаправлены на страницу: &lt;br&gt;
+        &lt;p&gt;Вы будете перенаправлены на страницу:&lt;/p&gt;
+        &lt;div class="target-url-display"&gt;
+            &lt;strong&gt;URL:&lt;/strong&gt; &lt;span id="display-target-url"&gt;&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p&gt;
            &lt;a id="redirect-link" href="https://<span data-placeholder="github-username"></span>.github.io/<span data-placeholder="repo-name"></span>/<span data-placeholder="repo-name"></span>.html"&gt;
                &lt;span data-placeholder="page-title"&gt;&lt;/span&gt;
            &lt;/a&gt;
         &lt;/p&gt;
         &lt;button id="confirm-redirect-btn" class="redirect-button"&gt;Перейти сейчас&lt;/button&gt;
-        &lt;p class="countdown" id="countdown-message"&gt;Автоматический переход через &lt;span id="countdown-timer"&gt;10&lt;/span&gt; секунд...&lt;/p&gt;
+        &lt;p class="countdown" id="countdown-message"&gt;Автоматический переход: &lt;span id="countdown-timer"&gt;Функция в разработке&lt;/span&gt;&lt;/p&gt;
+        
+        &lt;div class="safety-note"&gt;
+            &lt;p&gt;&lt;strong&gt;Важное примечание для посетителей:&lt;/strong&gt;&lt;/p&gt;
+            &lt;p&gt;Эта страница служит для автоматического перенаправления на основную страницу публикации, размещенную на GitHub Pages. Переход по ссылке является полностью безопасным, так как вы остаетесь в рамках домена &lt;code&gt;github.io&lt;/code&gt;, контролируемого владельцем репозитория.&lt;/p&gt;
+            &lt;p&gt;Вы можете дождаться автоматического перехода (эта функция пока в разработке) или нажать кнопку "Перейти сейчас". Ваше решение о переходе является осознанным выбором.&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Потенциальные последствия:&lt;/strong&gt; Отсутствуют. Данный код не собирает личные данные, не устанавливает вредоносное ПО и не изменяет настройки вашего устройства. Он лишь направляет ваш браузер на другую страницу в том же безопасном домене.&lt;/p&gt;
+        &lt;/div&gt;
     &lt;/div&gt;
 
     &lt;script&gt;
@@ -784,29 +817,29 @@
             const confirmButton = document.getElementById('confirm-redirect-btn');
             const countdownMessage = document.getElementById('countdown-message');
             const countdownTimer = document.getElementById('countdown-timer');
+            const displayTargetUrlElement = document.getElementById('display-target-url');
 
+
+            // Целевой URL уже корректно установлен в атрибуте href ссылки
+            // благодаря логике замены плейсхолдеров на основной странице.
+            // Поэтому мы просто считываем его напрямую из элемента.
             const targetUrl = redirectLinkElement.href;
+            console.log('Target URL:', targetUrl); // Добавлено для отладки
 
-            let timeLeft = 10;
-            let countdownInterval;
+            // Отображаем URL на странице
+            displayTargetUrlElement.textContent = targetUrl;
 
-            const startCountdown = () => {
-                countdownInterval = setInterval(() => {
-                    timeLeft--;
-                    countdownTimer.textContent = timeLeft;
-                    if (timeLeft &lt;= 0) {
-                        clearInterval(countdownInterval);
-                        window.location.href = targetUrl;
-                    }
-                }, 1000);
-            };
+            // Отключаем таймер и показываем сообщение о разработке
+            countdownTimer.textContent = 'Функция в разработке';
+            // clearInterval(countdownInterval); // Эта строка теперь не нужна, т.к. setInterval не запускается
 
+            // Логика кнопки "Перейти сейчас" остается прежней
             confirmButton.addEventListener('click', () => {
-                clearInterval(countdownInterval);
+                // clearInterval(countdownInterval); // Также не нужна, т.к. интервал не активен
                 window.location.href = targetUrl;
             });
 
-            startCountdown();
+            // startCountdown(); // Закомментировано, чтобы таймер не запускался автоматически
         });
     &lt;/script&gt;
 &lt;/body&gt;
