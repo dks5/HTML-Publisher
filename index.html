@@ -2,11 +2,112 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Redirecting...</title>
-    <link rel="canonical" href="Publishing-Page-Using-GitHub-Pages.html">
-    <meta http-equiv="refresh" content="0; url=Publishing-Page-Using-GitHub-Pages.html">
+    <title>Перенаправление...</title>
+    <link rel="canonical" href="https://dks5.github.io/HTML-Publisher/HTML-Publisher.html">
+    <style>
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f7f9fc;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .redirect-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #2c72c7;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .redirect-button {
+            padding: 12px 25px;
+            background-color: #2c72c7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .redirect-button:hover {
+            background-color: #1e5a8c;
+        }
+        .countdown {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        a {
+            color: #2c72c7;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <p>Вы будете перенаправлены на <a href="Publishing-Page-Using-GitHub-Pages.html">Publishing Page</a>.</p>
+    <div class="redirect-container">
+        <h1>Перенаправление на страницу публикации</h1>
+        <p>Вы будете перенаправлены на страницу: <br>
+           <a id="redirect-link" href="https://dks5.github.io/HTML-Publisher/HTML-Publisher.html">
+               <span data-placeholder="page-title"></span>
+           </a>
+        </p>
+        <button id="confirm-redirect-btn" class="redirect-button">Перейти сейчас</button>
+        <p class="countdown" id="countdown-message">Автоматический переход через <span id="countdown-timer">10</span> секунд...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const redirectLinkElement = document.getElementById('redirect-link');
+            const confirmButton = document.getElementById('confirm-redirect-btn');
+            const countdownMessage = document.getElementById('countdown-message');
+            const countdownTimer = document.getElementById('countdown-timer');
+
+            const targetUrl = redirectLinkElement.href;
+
+            let timeLeft = 10;
+            let countdownInterval;
+
+            const startCountdown = () => {
+                countdownInterval = setInterval(() => {
+                    timeLeft--;
+                    countdownTimer.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(countdownInterval);
+                        window.location.href = targetUrl;
+                    }
+                }, 1000);
+            };
+
+            confirmButton.addEventListener('click', () => {
+                clearInterval(countdownInterval);
+                window.location.href = targetUrl;
+            });
+
+            startCountdown();
+        });
+    </script>
 </body>
 </html>
