@@ -100,6 +100,7 @@
             font-family: 'Courier New', Courier, monospace;
             white-space: pre-wrap;
             overflow-wrap: break-word;
+            padding-right: 80px; /* Добавлено для отступа кнопки копирования */
         }
         :not(pre)>code {
             background-color: #eef;
@@ -173,11 +174,12 @@
         }
         .placeholder-actions {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* Разрешить перенос кнопок */
             gap: 10px;
             margin-top: 20px;
             border-top: 1px solid #ddd;
             padding-top: 20px;
+            justify-content: center; /* Центрирование кнопок */
         }
         .placeholder-actions button, .placeholder-actions .import-btn-label {
             padding: 8px 15px;
@@ -185,11 +187,18 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            background-color: var(--main-blue); /* Синий фон для всех кнопок */
+            color: white;
+            flex-grow: 1; /* Кнопки будут расти, чтобы заполнить пространство */
+            max-width: 200px; /* Ограничение максимальной ширины для десктопа */
+            text-align: center;
+            box-sizing: border-box; /* Учитывать padding и border в ширине */
         }
-        #apply-btn { background-color: var(--main-blue); color: white; }
-        #clear-btn { background-color: #6c757d; color: white; }
-        #export-btn { background-color: #28a745; color: white; }
-        .import-btn-label { background-color: #17a2b8; color: white; display: inline-block; }
+        /* Убираем индивидуальные цвета кнопок, так как все будут синими */
+        /* #apply-btn { background-color: var(--main-blue); color: white; } */
+        /* #clear-btn { background-color: #6c757d; color: white; } */
+        /* #export-btn { background-color: #28a745; color: white; } */
+        /* .import-btn-label { background-color: #17a2b8; color: white; display: inline-block; } */
         #import-input { display: none; }
         
         span[data-placeholder] {
@@ -220,7 +229,7 @@
             font-style: normal;
             font-weight: bold;
             color: var(--main-blue);
-            cursor: help;
+            cursor: pointer; /* Изменено на pointer для кликабельности */
             border: 1px solid var(--main-blue);
             border-radius: 50%;
             width: 18px;
@@ -231,6 +240,7 @@
             font-size: 0.8em;
             line-height: 1;
             box-sizing: border-box;
+            user-select: none; /* Предотвратить выделение текста при тапе */
         }
         .tooltip-text {
             visibility: hidden;
@@ -251,6 +261,12 @@
             text-align: left;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             border: 1px solid #ccc; /* Добавлен легкий бордер для выделения */
+            pointer-events: none; /* По умолчанию не реагирует на события мыши */
+        }
+        .tooltip-text.active { /* Класс для активации подсказки через JS */
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto; /* Реагирует на события мыши при активации */
         }
         .tooltip-text::after {
             content: "";
@@ -262,7 +278,8 @@
             border-style: solid;
             border-color: var(--light-lilac) transparent transparent transparent; /* Цвет стрелки соответствует фону */
         }
-        .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
+        /* Удаляем :hover для tooltip-text, так как будет управляться JS */
+        /* .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; } */
 
         /* Стиль для тегов внутри всплывающих заметок */
         .tooltip-text code {
@@ -301,6 +318,50 @@
         #notification.success {
             background-color: var(--success-green-bg);
             border: 1px solid var(--success-green-border);
+        }
+
+        /* Медиа-запросы для мобильной версии */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5em; /* Уменьшаем размер заголовка */
+                margin-bottom: 20px;
+            }
+
+            .container {
+                padding: 10px 15px; /* Уменьшаем внутренние отступы контейнера */
+            }
+
+            .details-content {
+                padding: 10px 10px 15px 10px; /* Уменьшаем отступы внутри блоков details */
+            }
+
+            details summary {
+                padding: 10px 12px; /* Уменьшаем отступы в заголовках details */
+            }
+
+            .placeholder-actions {
+                flex-direction: column; /* Кнопки в столбец */
+                align-items: stretch; /* Растягиваем кнопки по ширине */
+                gap: 8px; /* Уменьшаем расстояние между кнопками */
+            }
+
+            .placeholder-actions button, .placeholder-actions .import-btn-label {
+                width: 100%; /* Полная ширина для кнопок */
+                max-width: none; /* Снимаем ограничение ширины */
+                padding: 10px 15px; /* Увеличиваем padding для удобства нажатия */
+            }
+
+            .copy-btn {
+                opacity: 0.5; /* Прозрачность кнопки копирования */
+                background-color: rgba(85, 85, 85, 0.5); /* Прозрачность фона кнопки */
+                color: rgba(255, 255, 255, 0.5); /* Прозрачность текста кнопки */
+                right: 5px; /* Сдвигаем кнопку немного влево */
+                padding: 8px; /* Увеличиваем padding для удобства нажатия */
+            }
+
+            .code-block {
+                padding-right: 60px; /* Увеличиваем отступ справа для текста кода */
+            }
         }
     </style>
 </head>
@@ -526,7 +587,7 @@
 &lt;/body&gt;
 &lt;/html&gt;<button class="copy-btn" onclick="copyCode('redirect-html-code')">Копировать</button></div>
                             <div class="note">
-                                **Обратите внимание:** Значения внутри `<span>` будут автоматически обновлены на основе данных из "Панели управления".
+                                **Обратите внимание:** Значения внутри <code>&lt;span&gt;</code> будут автоматически обновлены на основе данных из "Панели управления".
                             </div>
                         </li>
                         <li>
@@ -565,7 +626,7 @@
                                     <span class="tooltip-text">Создает 'снимок' текущих изменений в отслеживаемых файлах и сохраняет его в истории репозитория. <code>-m</code> позволяет добавить краткое сообщение к коммиту, описывающее внесенные изменения.</span>
                                 </span>
                             </p>
-                            <div class="code-block" id="code8">git commit -m "<span class="commit-message">Обновление файлов</span>"<button class="copy-btn" onclick="copyCode('code8')">Копировать</button></div>
+                            <div class="code-block" id="code8">git commit -m "<span class="commit-message">Обновление файлов проекта</span>"<button class="copy-btn" onclick="copyCode('code8')">Копировать</button></div>
                         </li>
                         <li>
                             <p style="margin-bottom: 5px;"><strong>Переименуйте основную ветку в `main`:</strong>
@@ -627,6 +688,8 @@
             const exportBtn = document.getElementById('export-btn');
             const importInput = document.getElementById('import-input');
             const notificationEl = document.getElementById('notification');
+            const tooltipIcons = document.querySelectorAll('.tooltip-icon');
+            let activeTooltip = null;
 
             const showNotification = (message, type = 'error') => {
                 notificationEl.textContent = message;
@@ -720,9 +783,50 @@
                     setTimeout(() => {
                         button.innerText = 'Копировать';
                         button.style.backgroundColor = '#555';
+                        // Reset opacity for mobile if applicable
+                        if (window.innerWidth <= 768) {
+                            button.style.opacity = '0.5';
+                            button.style.backgroundColor = 'rgba(85, 85, 85, 0.5)';
+                            button.style.color = 'rgba(255, 255, 255, 0.5)';
+                        }
                     }, 2000);
                 });
             }
+
+            // --- Tooltip functionality for mobile (click to toggle) ---
+            tooltipIcons.forEach(icon => {
+                icon.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Предотвратить закрытие, если клик был внутри другого тултипа
+                    const tooltipText = icon.nextElementSibling;
+
+                    if (activeTooltip && activeTooltip !== tooltipText) {
+                        activeTooltip.classList.remove('active'); // Скрыть предыдущий активный тултип
+                    }
+
+                    tooltipText.classList.toggle('active');
+                    activeTooltip = tooltipText.classList.contains('active') ? tooltipText : null;
+                });
+
+                // Для десктопа: показывать/скрывать по наведению
+                icon.parentNode.addEventListener('mouseenter', () => {
+                    if (window.innerWidth > 768) {
+                        icon.nextElementSibling.classList.add('active');
+                    }
+                });
+                icon.parentNode.addEventListener('mouseleave', () => {
+                    if (window.innerWidth > 768) {
+                        icon.nextElementSibling.classList.remove('active');
+                    }
+                });
+            });
+
+            // Скрыть активный тултип при клике вне его
+            document.addEventListener('click', (event) => {
+                if (activeTooltip && !activeTooltip.parentNode.contains(event.target)) {
+                    activeTooltip.classList.remove('active');
+                    activeTooltip = null;
+                }
+            });
 
             // Initial application of placeholders on page load
             applyPlaceholders(); 
@@ -730,3 +834,4 @@
     </script>
 </body>
 </html>
+
