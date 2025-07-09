@@ -461,7 +461,7 @@
                 </svg>
             </button>, чтобы скопировать ссылку. Или нажми на заголовок выше, чтобы перейти на страницу публикации.
             Эта ссылка формируется из вашего никнейма GitHub (<span data-placeholder="github-username"></span>) и имени репозитория (<span data-placeholder="repo-name"></span>) в формате:
-            <code class="block mt-2" id="generated-link-code">https://<span data-placeholder="github-username"></span>.github.io/<span data-placeholder="repo-name"></span>/index.html</code>
+            <code class="block mt-2" id="generated-link-code">https://<span data-placeholder="github-username"></span>.github.io/<span data-placeholder="repo-name"></span>/</code>
         </p>
         
         <details open>
@@ -957,7 +957,10 @@
                 const placeholderMap = {};
                 document.querySelectorAll('span[data-placeholder]').forEach(span => {
                     const key = span.dataset.placeholder;
-                    if (!placeholderMap[key]) placeholderMap[key] = [];
+                    // Fix: Initialize the array if it doesn't exist
+                    if (!placeholderMap[key]) {
+                        placeholderMap[key] = [];
+                    }
                     placeholderMap[key].push(span);
                 });
 
@@ -983,14 +986,15 @@
                 // Динамически обновляем атрибут href для ссылки в заголовке
                 const username = githubUsernameInput.value || githubUsernameInput.placeholder;
                 const repo = repoNameInput.value || repoNameInput.placeholder;
-                let generatedUrl = '#'; // Default fallback
+                let generatedUrlForH1 = '#'; 
                 if (username && repo) {
-                    generatedUrl = `https://${username}.github.io/${repo}/index.html`; 
+                    generatedUrlForH1 = `https://${username}.github.io/${repo}/`; // Изменено для заголовка H1
                 }
-                mainTitleLink.href = generatedUrl;
+                mainTitleLink.href = generatedUrlForH1;
+
                 // Обновляем текст в code блоке для отображения формата ссылки
                 if (generatedLinkCode) {
-                    generatedLinkCode.innerHTML = `https://${username}.github.io/${repo}/index.html`; 
+                    generatedLinkCode.innerHTML = `https://${username}.github.io/${repo}/`; // Изменено для отображения формата ссылки
                 }
             };
             
@@ -1107,7 +1111,7 @@
                     const repoNameInput = document.getElementById('repo-name');
                     const username = githubUsernameInput.value || githubUsernameInput.placeholder;
                     const repo = repoNameInput.value || repoNameInput.placeholder;
-                    const urlToCopy = `https://${username}.github.io/${repo}/index.html`; 
+                    const urlToCopy = `https://${username}.github.io/${repo}/`; // Изменено для кнопки копирования
 
                     // Теперь нет текстового элемента внутри кнопки, только SVG-иконка
                     const buttonIcon = copyUrlButton.querySelector('.inline-copy-icon'); // Get the SVG icon
