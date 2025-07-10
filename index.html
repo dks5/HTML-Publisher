@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Перенаправление...</title>
-    <link rel="canonical" href="https://dks5.github.io/HTML-Publisher/HTML-Publisher.html">
+    <title id="dynamic-redirect-title">Перенаправление на Название HTML страницы для Redirect...</title>
+    <link rel="canonical" href="https://dks5.github.io/repo-name/repo-name.html">
     <style>
         body {
             font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -94,8 +94,9 @@
             <strong>URL:</strong> <span id="display-target-url"></span>
         </div>
         <p>
-           <a id="redirect-link" href="https://dks5.github.io/HTML-Publisher/HTML-Publisher.html">
-               <span data-placeholder="page-title"></span>
+           <span id="dynamic-page-title-before-link">Название страницы (для редиректа)</span>: <!-- New span for the dynamic label before the link -->
+           <a id="redirect-link" href="https://dks5.github.io/repo-name/repo-name.html">
+               <span data-placeholder="page-title">Название HTML страницы для Redirect</span> <!-- This span is filled by the main page's JS -->
            </a>
         </p>
         <button id="confirm-redirect-btn" class="redirect-button">Перейти сейчас</button>
@@ -116,11 +117,23 @@
             const countdownMessage = document.getElementById('countdown-message');
             const countdownTimer = document.getElementById('countdown-timer');
             const displayTargetUrlElement = document.getElementById('display-target-url');
+            
+            // Get the span that holds the page title from the placeholder
+            const pageTitlePlaceholderSpan = redirectLinkElement.querySelector('span[data-placeholder="page-title"]');
+            const dynamicPageTitleBeforeLink = document.getElementById('dynamic-page-title-before-link');
+            const dynamicRedirectTitle = document.getElementById('dynamic-redirect-title');
+
+            // Get the page title value. It should be pre-filled by the main page's JS.
+            // If empty, use a default (from the placeholder's default value in the main page)
+            const pageTitleValue = pageTitlePlaceholderSpan.textContent.trim() || "Название HTML страницы для Redirect";
+
+            // Update the title of the HTML page
+            dynamicRedirectTitle.textContent = `Перенаправление на ${pageTitleValue}...`;
+
+            // Update the text before the link
+            dynamicPageTitleBeforeLink.textContent = pageTitleValue;
 
 
-            // Целевой URL уже корректно установлен в атрибуте href ссылки
-            // благодаря логике замены плейсхолдеров на основной странице.
-            // Поэтому мы просто считываем его напрямую из элемента.
             const targetUrl = redirectLinkElement.href;
             console.log('Target URL:', targetUrl); // Добавлено для отладки
 
@@ -129,15 +142,11 @@
 
             // Отключаем таймер и показываем сообщение о разработке
             countdownTimer.textContent = 'Функция в разработке';
-            // clearInterval(countdownInterval); // Эта строка теперь не нужна, т.к. setInterval не запускается
 
             // Логика кнопки "Перейти сейчас" остается прежней
             confirmButton.addEventListener('click', () => {
-                // clearInterval(countdownInterval); // Также не нужна, т.к. интервал не активен
                 window.location.href = targetUrl;
             });
-
-            // startCountdown(); // Закомментировано, чтобы таймер не запускался автоматически
         });
     </script>
 </body>
